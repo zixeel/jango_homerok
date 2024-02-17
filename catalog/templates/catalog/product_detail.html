@@ -1,0 +1,27 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+{% load mymedia %}
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ object.name|title }}</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title"></h1>
+                    <img class="card-img-top" src="{% mymedia object.image %}" >
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>- {{ object.description|slice:100 }}</li>
+                        <li>- Цена за ед. товара!- {{ object.price_for_1 }}р.</li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% endblock %}
