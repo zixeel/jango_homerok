@@ -1,6 +1,9 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
+<a class="btn btn-outline-primary" href="{% url 'catalog:create_blog' %}"> добавить запись</a>
+
 {% for object in object_list %}
+{% if object.is_published == True %}
 <div class="container">
     <div class="row text-center">
         <div class="col-3">
@@ -15,10 +18,13 @@
                         <li>- Просмотров {{ object.view_count }}р.</li>
 
                     </ul>
-                    <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:blog' object.pk %}">Перейти</a>
+                    <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:view_blog' object.pk %}">Перейти</a>
+                    <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:update_blog' object.pk %}">Редактировать</a>
                 </div>
             </div>
         </div>
     </div>
+    {% else %}
+    {% endif %}
 {% endfor %}
     {% endblock %}
