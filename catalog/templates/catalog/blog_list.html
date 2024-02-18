@@ -5,7 +5,7 @@
 <a class="btn btn-outline-primary" href="{% url 'catalog:create_blog' %}"> добавить запись</a>
 </div>
 {% for object in object_list %}
-{% if object.is_published == True %}
+
 <div class="container">
     <div class="row text-center">
         <div class="col-3">
@@ -18,7 +18,7 @@
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>- {{ object.content|slice:100 }}...</li>
                         <li>- Просмотров {{ object.view_count }}р.</li>
-                        <img class="card-img-top" src="{% mymedia object.image %}" >
+                        <img class="card-img-top" src="{% mymedia object.preview %}" >
 
                     </ul>
 
@@ -29,7 +29,6 @@
             </div>
         </div>
     </div>
-    {% else %}
-    {% endif %}
+
 {% endfor %}
     {% endblock %}

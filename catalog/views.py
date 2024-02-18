@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from pytils.translit import slugify
 
 from catalog.models import Category, Product, Blog
 
@@ -46,6 +47,11 @@ class BlogListView(ListView):
     """Просмотр списка блогов"""
     model = Blog
 
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        queryset = queryset.filter(is_published=True)
+        return queryset
+
 
 class BlogDetailView(DetailView):
     """просмотр блога отдельно"""
@@ -65,22 +71,26 @@ class BlogCreateView(CreateView):
     fields = ('title', 'content', 'preview', 'is_published')
     success_url = reverse_lazy('catalog:blog_list')
 
+    def form_valid(self, form):
+        if form.is_valid():
+            new_mat = form.save()
+            new_mat.slug = slugify(new_mat.title)
+            new_mat.save()
+
+        return super().form_valid(form)
+
 
 class BlogDeleteView(DeleteView):
+    """удалиение блога"""
     model = Blog
     success_url = reverse_lazy('catalog:blog_list')
 
 
 class BlogUpdateView(UpdateView):
+    """редактирование записи"""
     model = Blog
     fields = ('title', 'content', 'preview', 'is_published')
-    success_url = reverse_lazy('catalog:blog_list')
-    """
-     Пытался сделать в соотсветсвии с требованиями задания что бы редиректило на детальный просмотр того блога который
-     редактировали но мне выдаёт оишбку  
-     NoReverseMatch at /blog_edit/2/
-     Reverse for 'catalog/view_blog/' not found. 'catalog/view_blog/' is not a valid view function or pattern name.
-    """
-    # def get_success_url(self):
-    #     return reverse_lazy('view_blog/', kwargs={'pk': self.object.pk})
 
+    def get_success_url(self):
+        """перенаправление на старицу редактируемого объекта после конформации"""
+        return reverse_lazy('catalog:view_blog', args=[self.kwargs.get("pk")])
