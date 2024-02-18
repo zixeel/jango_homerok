@@ -1,7 +1,9 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
+{% load mymedia %}
+<div class="col-12">
 <a class="btn btn-outline-primary" href="{% url 'catalog:create_blog' %}"> добавить запись</a>
-
+</div>
 {% for object in object_list %}
 {% if object.is_published == True %}
 <div class="container">
@@ -9,17 +11,20 @@
         <div class="col-3">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">{{ object.name|title }}</h4>
+                    <h4 class="my-0 font-weight-normal">{{ object.title|title }}</h4>
                 </div>
                 <div class="card-body">
                     <h1 class="card-title pricing-card-title"></h1>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <li>- {{ object.title }}</li>
+                        <li>- {{ object.content|slice:100 }}...</li>
                         <li>- Просмотров {{ object.view_count }}р.</li>
+                        <img class="card-img-top" src="{% mymedia object.image %}" >
 
                     </ul>
+
                     <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:view_blog' object.pk %}">Перейти</a>
                     <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:update_blog' object.pk %}">Редактировать</a>
+                    <a class="p-2 btn btn-outline-danger" href="{% url 'catalog:delete_blog' object.pk %}">Удалить</a>
                 </div>
             </div>
         </div>
