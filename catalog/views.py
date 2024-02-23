@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
@@ -62,6 +63,15 @@ class BlogDetailView(DetailView):
         self.object = super().get_object(queryset)
         self.object.view_count += 1
         self.object.save()
+        if self.object.view_count == 100:
+            send_mail(
+                'Ваш пост набрал 100 просмотров',  # Тема письма
+                'Поздравляем ваш пост такой то набрал 100 просмотров дальше больше',  # Текст письма
+                'strpan549@gmail.com',  # Почта отправителя
+                ['strpan549@gmail.com'],  # Список адресов получателей
+                fail_silently=False,  # Не показывать ошибки отправки
+            )
+
         return self.object
 
 
